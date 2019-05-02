@@ -1,5 +1,5 @@
 import logging
-
+import os
 from app.config_common import *
 
 
@@ -13,7 +13,7 @@ SECRET_KEY = 'houdini'
 ADMIN_CREDENTIALS = ('admin', 'pa$$word')
 
 # Database choice
-SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # Configuration of a Gmail account for sending mails
