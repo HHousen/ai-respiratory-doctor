@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Setup the app with the config.py file
 app.config.from_object('app.config_common')
-if 'ENV' in os.environ and os.environ['ENV'] == 'prod':
+if 'ENV' in os.environ and (os.environ['ENV'] == 'prod' or os.environ['ENV'] == 'production'):
     app.config.from_object('app.config_prod')
 else:
     app.config.from_object('app.config_dev')
