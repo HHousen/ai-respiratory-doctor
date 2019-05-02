@@ -14,7 +14,7 @@ SECRET_KEY = 'houdini'
 ADMIN_CREDENTIALS = ('admin', 'pa$$word')
 
 # Database choice
-SQLALCHEMY_DATABASE_URI = "psycopg2+" + os.environ['DATABASE_URL']
+SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2" + os.environ['DATABASE_URL'][8:]
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # Configuration of a Gmail account for sending mails
