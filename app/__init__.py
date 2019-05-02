@@ -6,9 +6,9 @@ app = Flask(__name__)
 # Setup the app with the config.py file
 app.config.from_object('app.config_common')
 if 'ENV' in os.environ and os.environ['ENV'] == 'prod':
-    app.config.from_object('app.config_dev')
-else:
     app.config.from_object('app.config_prod')
+else:
+    app.config.from_object('app.config_dev')
 
 # Setup the logger
 from app.logger_setup import logger

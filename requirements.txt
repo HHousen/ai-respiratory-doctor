@@ -14,3 +14,4 @@ structlog==19.1.0
 termcolor==1.1.0
 WTForms==2.2.1
 stripe==2.21.0
+gunicorn==19.9.0
