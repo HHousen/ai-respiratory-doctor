@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     confirmation = db.Column(db.Boolean)
     paid = db.Column(db.Boolean)
     customer_id = db.Column(db.String)
-    _password = db.Column(db.String)
+    _password = db.Column(db.Binary(60))
 
     @property
     def full_name(self):
