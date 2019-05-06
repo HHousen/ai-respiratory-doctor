@@ -32,3 +32,5 @@ LOG_LEVEL = logging.DEBUG
 LOG_FILENAME = 'activity.log'
 LOG_MAXBYTES = 1024
 LOG_BACKUPS = 2
+
+UPLOAD_FOLDER = 'uploads'

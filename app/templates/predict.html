@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form action="/predict-api" id="upload-file" method="post" enctype="multipart/form-data">
+    <label for="imageUpload" class="upload-label">
+        Upload...
+    </label>
+    <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
+    <button type="button" class="btn btn-primary btn-lg " id="btn-predict">Predict!</button>
+</form>
+
+<table>
+    <thead>
+         <tr>
+              <th>Category</th>
+              <th>Percent</th>
+          </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+</table>
+
+<script>
+$('#btn-predict').click(function () {
+    var form_data = new FormData($('#upload-file')[0]);
+
+    // Show loading animation
+
+    // Make prediction by calling api /predict-api
+    $.ajax({
+        type: 'POST',
+        url: '/predict-api',
+        data: form_data,
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: true,
+        success: function (data) {
+            console.log('Success!' + data);
+            jQuery.each(JSON.parse(data), function (key, value) {
+                var eachrow = "<tr>"
+                            + "<td>" + key + "</td>"
+                            + "<td>" + value + "</td>"
+                            + "</tr>";
+                $('#tbody').append(eachrow);
+            });
+        },
+    });
+});
+</script>
+{% endblock %}

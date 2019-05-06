@@ -1,13 +1,18 @@
 from flask import render_template, jsonify
 from app import app
 import random
-
+from app.decorators import *
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html', title='Home')
 
+@app.route('/predict')
+@login_required
+@payment_required
+def predict():
+    return render_template('predict.html', title='Predict')
 
 @app.route('/map')
 def map():
