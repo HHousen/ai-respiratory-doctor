@@ -19,33 +19,35 @@
     <tbody id="tbody">
     </tbody>
 </table>
+{% endblock %}
 
+{% block final %}
 <script>
-$('#btn-predict').click(function () {
-    var form_data = new FormData($('#upload-file')[0]);
-
-    // Show loading animation
-
-    // Make prediction by calling api /predict-api
-    $.ajax({
-        type: 'POST',
-        url: '/predict-api',
-        data: form_data,
-        contentType: false,
-        cache: false,
-        processData: false,
-        async: true,
-        success: function (data) {
-            console.log('Success!' + data);
-            jQuery.each(JSON.parse(data), function (key, value) {
-                var eachrow = "<tr>"
-                            + "<td>" + key + "</td>"
-                            + "<td>" + value + "</td>"
-                            + "</tr>";
-                $('#tbody').append(eachrow);
-            });
-        },
+    $('#btn-predict').click(function () {
+        var form_data = new FormData($('#upload-file')[0]);
+    
+        // Show loading animation
+    
+        // Make prediction by calling api /predict-api
+        $.ajax({
+            type: 'POST',
+            url: '/predict-api',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: true,
+            success: function (data) {
+                console.log('Success!' + data);
+                jQuery.each(JSON.parse(data), function (key, value) {
+                    var eachrow = "<tr>"
+                                + "<td>" + key + "</td>"
+                                + "<td>" + value + "</td>"
+                                + "</tr>";
+                    $('#tbody').append(eachrow);
+                });
+            },
+        });
     });
-});
-</script>
+    </script>
 {% endblock %}
