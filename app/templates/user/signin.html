@@ -1,24 +1,50 @@
 {% extends "layout.html" %}
 
 {% block head %}
-    {{ super() }}
+	{{ super() }}
 {% endblock %}
 
 {% block content %}
 
-	<div class="ui form-user center raised very padded text container segment">
-		<form class="ui form" action="/user/signin" method="post">
-			<h4 class="ui dividing header">Login</h4>
-	    	{{ m.render_field(form.email) }}
-	    	{{ m.render_field(form.password) }}
-		  	{{ form.csrf_token }}
-		  	<button class="ui primary button" type="submit">Confirm</button>
-		  	<a href="/user/forgot">
-			  	<div class="ui floated right basic red button">
-	        		I forgot my password
-	    		</div>
-	    	</a>
-		</form>
-	</div>
+<div id="main">
+	<center>
+		<h5 class="indigo-text">Please, login into your account</h5>
 
+		<div class="container">
+			<div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+	
+			<form class="col s12" action="/user/signin" method="post">
+				<div class='row'>
+					<div class='input-field col s12'>
+						{{ m.render_field(form.email) }}
+					</div>
+				</div>
+	
+				<div class='row'>
+					<div class='input-field col s12'>
+						{{ m.render_field(form.password) }}
+					</div>
+
+					<label style='float: right;'>
+						<a class='pink-text' href='/user/forgot'><b>Forgot Password?</b></a>
+					</label>
+				</div>
+	
+				<br/>
+				<center>
+					<div class='row'>
+						<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+					</div>
+				</center>
+				{{ form.csrf_token }}
+			</form>
+			</div>
+		</div>
+		<a href="/user/signup">Create account</a>
+	</center>
+</div>
+
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

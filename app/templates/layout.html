@@ -1,77 +1,108 @@
-<!DOCTYPE html>
 {% import "macros.html" as m %}
+<!DOCTYPE html>
 <html lang="en">
-	<body id="container">
-   		<div id="header">
-   			{% block head %}
-				<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
-				<meta charset="UTF-8">
-				<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-				<!-- jQuery -->
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-				<!-- Semantic Main CSS -->
-				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
-				<!-- Semantic Reset CSS -->
-				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/reset.min.css"/>
-				<!-- Semantic Menu CSS -->
-				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/menu.min.css"/>
-				<!-- Main Semantic JS  -->
-			    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
-				<!-- Custom CSS -->
-				<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-				<!-- Browser tab name -->
-				<title>{{ title }}</title>
-				<!-- Navbar -->
-				<div class="ui attached inverted menu">
-				  	{{ m.nav_link('index', 'Home') }}
-				  	{{ m.nav_link('map', 'Map') }}
-					{{ m.nav_link('contact', 'Contact') }}
-				 	<div class="right menu">
-				 		<!-- User is logged in -->
-				      	{% if current_user.is_authenticated %}
-				      		<div class="item">
-				        		<a class="ui primary button" href="/user/account">{{ current_user.full_name }}</a>
-				    		</div>
-				    		<div class="item">
-				        		<a class="ui default button" href="/user/signout">Sign out</a>
-				    		</div>
-			          	<!-- User is not logged in -->
-			          	{% else %}
-			          		<div class="item">
-				        		<a class="ui primary button" href="/user/signin">Sign in</a>
-				    		</div>
-				    		<div class="item">
-				        		<a class="ui default button" href="/user/signup">Sign up</a>
-				    		</div>
-						{% endif %}
-			  		</div>
-				</div>
-			{% endblock %}
-   		</div>
-   		<!-- Message flashing -->
-		{% with messages = get_flashed_messages(with_categories=true) %}
-		  	{% if messages %}
-		    	<ul>
-		    		{% for category, message in messages %}
-		      			<li class="ui {{ category }} message flash">{{ message }}</li>
-		    		{% endfor %}
-		    	</ul>
-		  	{% endif %}
-		{% endwith %}
-   		<div id="body" class="body">
-   			{% block content %}{% endblock %}
-   		</div>
-		<div id="footer">
-			<div class="ui divider"></div>
-	    		<div class="ui divided horizontal footer link list">
-			      	<div class="item">
-			        	Max Halford
-			      	</div>
-			      	<div class="item">
-			        	<a href="https://github.com/MaxHalford"><i class="github icon"></i></a>
-			      	</div>
-	    		</div>
-	  		</div>
+<head>
+	{% block head %}
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>{{ title }} - AI Respiratory Doctor</title>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+	<!-- Materialize.css -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous" />
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	{% endblock %}
+</head>
+<body>		
+	<!-- Navbar -->
+	{% if current_user.is_authenticated %}
+		<ul id="dropdown-account" class="dropdown-content">
+			<li><a href="/user/account">My Account</a></li>
+			<li><a href="/user/signout">Sign Out</a></li>
+			{{ m.nav_link('pay', 'Pay') }}
+		</ul>
+	{% endif %}
+
+	<nav class="red darken-3" role="navigation">
+		<div class="nav-wrapper container">
+			<a id="logo-container" href="/" class="brand-logo">AI Respiratory Doctor</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				{{ m.nav_link('index', 'Home') }}
+				{{ m.nav_link('map', 'Map') }}
+				{% if current_user.is_authenticated %}
+					{{ m.nav_link('predict', 'Predict') }}
+					<li><a class="dropdown-trigger" href="#" data-target="dropdown-account">Account<i class="material-icons right">arrow_drop_down</i></a></li>
+				{% else %}
+					<li><a href="/user/signin">Sign In</a></li>
+					<li><a href="/user/signup">Sign Up</a></li>
+				{% endif %}
+			</ul>
+	
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		</div>
-	</body>
+	</nav>
+	<!-- Message flashing -->
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			<ul>
+				{% for category, message in messages %}
+					<li class="ui {{ category }} message flash">{{ message }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+
+	{% block content %}{% endblock %}
+
+	{% block footer %}
+	<footer class="page-footer red darken-3">
+		<div class="container">
+			<div class="row">
+			<div class="col l6 s12">
+				<h5 class="white-text">Company Bio</h5>
+				<p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+	
+	
+			</div>
+			<div class="col l3 s12">
+				<h5 class="white-text">Settings</h5>
+				<ul>
+				<li><a class="white-text" href="#!">Link 1</a></li>
+				<li><a class="white-text" href="#!">Link 2</a></li>
+				<li><a class="white-text" href="#!">Link 3</a></li>
+				<li><a class="white-text" href="#!">Link 4</a></li>
+				</ul>
+			</div>
+			<div class="col l3 s12">
+				<h5 class="white-text">Connect</h5>
+				<ul>
+				<li><a class="white-text" href="#!">Link 1</a></li>
+				<li><a class="white-text" href="#!">Link 2</a></li>
+				<li><a class="white-text" href="#!">Link 3</a></li>
+				<li><a class="white-text" href="#!">Link 4</a></li>
+				</ul>
+			</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+			&copy; <script>document.write(new Date().getFullYear());</script>, Designed and Coded by <a class="orange-text" href="https://haydenhousen.com">Hayden Housen</a>
+			</div>
+		</div>
+	</footer>
+	{% endblock %}
+
+	<!-- Scripts -->
+	<!-- jQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<!-- Materialize.css -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0=" crossorigin="anonymous"></script>
+	<!-- Custom JS -->
+	<script src="{{ url_for('static', filename='js/init.js') }}"></script>
+
+</body>
 </html>
