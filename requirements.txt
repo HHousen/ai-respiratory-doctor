@@ -12,6 +12,7 @@ itsdangerous==1.1.0
 pytz==2019.1
 structlog==19.1.0
 termcolor==1.1.0
+environs==4.1.2
 WTForms==2.2.1
 stripe==2.21.0
 gunicorn==19.9.0

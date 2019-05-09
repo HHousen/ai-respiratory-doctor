@@ -1,19 +1,27 @@
-{% extends "layout.html" %}
-
-{% block head %}
-    {{ super() }}
-{% endblock %}
+{% extends "user/signup-layout.html" %}
 
 {% block content %}
-
-	<div class="ui form-user center raised very padded text container segment">
-		<form class="ui form" action="{{ url_for('userbp.reset', token=token) }}" method="POST">
-			<h4 class="ui dividing header">Choose a new password</h4>
-			{{ m.render_field(form.password) }}
-	    	{{ m.render_field(form.confirm) }}
-		  	{{ form.csrf_token }}
-		  	<button class="ui primary button" type="submit">Confirm</button>
-		</form>
-	</div>
-
+	<center>
+		<h4 class="white-text">Choose A New Password</h4>
+		<div class="container">
+			<div id="box" class="z-depth-1 grey lighten-4 row">
+				<form class="col s12" action="{{ url_for('userbp.reset', token=token) }}" method="POST">
+					<div class='row'>
+						<div class='input-field col s12'>
+							{{ m.render_field(form.password) }}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='input-field col s12'>
+							{{ m.render_field(form.confirm) }}
+						</div>
+					</div>
+					<div class='row'>
+						<button class="btn btn-large waves-effect" type="submit">Confirm</button>
+					</div>
+					{{ form.csrf_token }}
+				</form>
+			</div>
+		</div>
+	</center>
 {% endblock %}

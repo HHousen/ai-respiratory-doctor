@@ -1,0 +1,31 @@
+{
+  "name": "ai-respiratory-doctor",
+  "version": "0.0.1",
+  "description": "![License](http://img.shields.io/:license-mit-blue.svg)",
+  "main": "",
+  "scripts": {
+    "build": "NODE_ENV=production brunch build --production",
+    "start": "concurrently -n \"BRUNCH,FLASK\" -c \"green.bold,cyan.bold\" \"npm:brunch-dev\" \"npm:flask-server\"",
+    "brunch-dev": "NODE_ENV=debug brunch watch",
+    "flask-server": "flask run",
+    "run-production": "npm build && gunicorn app:app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HHousen/ai-respiratory-doctor.git"
+  },
+  "author": "Hayden Housen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HHousen/ai-respiratory-doctor/issues"
+  },
+  "homepage": "https://github.com/HHousen/ai-respiratory-doctor#readme",
+  "dependencies": {
+    "brunch": "^2.10.17"
+  },
+  "devDependencies": {
+    "brunch": "^2.10.17",
+    "concurrently": "^4.1.0",
+    "sass-brunch": "^2.10.8"
+  }
+}

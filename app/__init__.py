@@ -3,12 +3,8 @@ import os
 
 app = Flask(__name__)
 
-# Setup the app with the config.py file
-app.config.from_object('app.config_common')
-if 'ENV' in os.environ and (os.environ['ENV'] == 'prod' or os.environ['ENV'] == 'production'):
-    app.config.from_object('app.config_prod')
-else:
-    app.config.from_object('app.config_dev')
+# Setup the app with the settings.py file
+app.config.from_object('app.settings')
 
 # Setup the logger
 from app.logger_setup import logger

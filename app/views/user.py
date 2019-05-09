@@ -5,6 +5,7 @@ from itsdangerous import URLSafeTimedSerializer
 from app import app, models, db
 from app.forms import user as user_forms
 from app.toolbox import email
+from app.decorators import already_signed_in
 
 # Setup Stripe integration
 import stripe
@@ -26,6 +27,7 @@ userbp = Blueprint('userbp', __name__, url_prefix='/user')
 
 
 @userbp.route('/signup', methods=['GET', 'POST'])
+@already_signed_in
 def signup():
     form = user_forms.SignUp()
     if form.validate_on_submit():
@@ -78,6 +80,7 @@ def confirm(token):
 
 
 @userbp.route('/signin', methods=['GET', 'POST'])
+@already_signed_in
 def signin():
     form = user_forms.Login()
     if form.validate_on_submit():

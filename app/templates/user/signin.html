@@ -1,17 +1,11 @@
-{% extends "layout.html" %}
-
-{% block head %}
-	{{ super() }}
-{% endblock %}
+{% extends "user/signup-layout.html" %}
 
 {% block content %}
-
-<div id="main">
 	<center>
-		<h5 class="indigo-text">Please, login into your account</h5>
+		<h4 class="white-text">Login To Your Account</h4>
 
 		<div class="container">
-			<div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+			<div id="box" class="z-depth-1 grey lighten-4 row">
 	
 			<form class="col s12" action="/user/signin" method="post">
 				<div class='row'>
@@ -26,25 +20,19 @@
 					</div>
 
 					<label style='float: right;'>
-						<a class='pink-text' href='/user/forgot'><b>Forgot Password?</b></a>
+						<a class='red-text text-darken-1' href='/user/forgot'><b>Forgot Password?</b></a>
 					</label>
 				</div>
 	
 				<br/>
-				<center>
-					<div class='row'>
-						<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
-					</div>
-				</center>
+				<div class='row'>
+					<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect'>Login</button>
+				</div>
 				{{ form.csrf_token }}
 			</form>
 			</div>
 		</div>
 		<a href="/user/signup">Create account</a>
 	</center>
-</div>
 
-{% endblock %}
-
-{% block footer %}
 {% endblock %}

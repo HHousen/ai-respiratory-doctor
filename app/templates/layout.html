@@ -10,10 +10,9 @@
 	<title>{{ title }} - AI Respiratory Doctor</title>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-	<!-- Materialize.css -->
+	<!-- Materialize.css Icons -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous" />
-	<!-- Custom CSS -->
+	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	{% endblock %}
 </head>
@@ -30,31 +29,32 @@
 	<nav class="red darken-3" role="navigation">
 		<div class="nav-wrapper container">
 			<a id="logo-container" href="/" class="brand-logo">AI Respiratory Doctor</a>
-			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				{{ m.nav_link('index', 'Home') }}
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+			<ul class="right hide-on-med-and-down">
 				{{ m.nav_link('map', 'Map') }}
 				{% if current_user.is_authenticated %}
 					{{ m.nav_link('predict', 'Predict') }}
-					<li><a class="dropdown-trigger" href="#" data-target="dropdown-account">Account<i class="material-icons right">arrow_drop_down</i></a></li>
+					<li><a class="dropdown-trigger" href="#" data-target="dropdown-account">{{ current_user.first_name }}<i class="material-icons right">settings</i></a></li>
 				{% else %}
 					<li><a href="/user/signin">Sign In</a></li>
 					<li><a href="/user/signup">Sign Up</a></li>
 				{% endif %}
 			</ul>
-	
-			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+			<ul class="sidenav" id="nav-mobile">
+				{{ m.nav_link('map', 'Map') }}
+				{% if current_user.is_authenticated %}
+					{{ m.nav_link('predict', 'Predict') }}
+					<li><a href="/user/account">My Account</a></li>
+					<li><a href="/user/signout">Sign Out</a></li>
+					{{ m.nav_link('pay', 'Pay') }}
+				{% else %}
+					<li><a href="/user/signin">Sign In</a></li>
+					<li><a href="/user/signup">Sign Up</a></li>
+				{% endif %}
+			</ul>
 		</div>
 	</nav>
-	<!-- Message flashing -->
-	{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			<ul>
-				{% for category, message in messages %}
-					<li class="ui {{ category }} message flash">{{ message }}</li>
-				{% endfor %}
-			</ul>
-		{% endif %}
-	{% endwith %}
 
 	{% block content %}{% endblock %}
 
@@ -63,7 +63,7 @@
 		<div class="container">
 			<div class="row">
 			<div class="col l6 s12">
-				<h5 class="white-text">Company Bio</h5>
+				<h5 class="white-text">AI Respiratory Doctor</h5>
 				<p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
 	
 	
@@ -102,8 +102,21 @@
 	<!-- Materialize.css -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0=" crossorigin="anonymous"></script>
 	<!-- Custom JS -->
-	<script src="{{ url_for('static', filename='js/init.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 	
+	<!-- Message flashing -->
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+			{% for category, message in messages %}
+				<script>
+					$( document ).ready(function() {
+						M.toast({html: '{{ message }}'});
+					});
+				</script>
+			{% endfor %}
+	{% endif %}
+	{% endwith %}
+
 	{% block final %}{% endblock %}
 </body>
 </html>
