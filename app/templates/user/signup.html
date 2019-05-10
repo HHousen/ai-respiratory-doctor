@@ -12,8 +12,8 @@
 {% block content %}
 	<center>
 		<h4 class="white-text">Sign Up</h4>
-		<div class="container">
-			<div id="box" class="z-depth-1 grey lighten-4 row" style="max-width: 500px;">
+		<div id="outer" class="container">
+			<div id="box" class="z-depth-1 grey lighten-4 row" style="max-width: 500px;margin-bottom:20px;">
 				<form class="col s12" action="/user/signup" method="post">
 					<div class='row'>
 						<div class='input-field col s6'>
@@ -50,6 +50,7 @@
 					{{ form.csrf_token }}
 				</form>
 			</div>
+			<a href="/user/signin">Already have an account?</a>
 		</div>
 	</center>
 {% endblock %}

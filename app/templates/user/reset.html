@@ -3,7 +3,7 @@
 {% block content %}
 	<center>
 		<h4 class="white-text">Choose A New Password</h4>
-		<div class="container">
+		<div id="outer" class="container">
 			<div id="box" class="z-depth-1 grey lighten-4 row">
 				<form class="col s12" action="{{ url_for('userbp.reset', token=token) }}" method="POST">
 					<div class='row'>

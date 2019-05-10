@@ -15,13 +15,11 @@
 
 <!-- Render a WTForm form's field (with it's possible associated errors) from a WTForms form -->
 {% macro render_field(field) %}
-	{{ field(name_=field.name, id=field.name, class_="field") }}
-	<label for={{ field.name }}>{{ field.name|title }}</label>
+	{{ field(name_=field.name, id=field.name, class="validate") }}
+	<label for="{{ field.name }}">{{ field.description|title }}</label>
   	{% if field.errors %}
-    	<ul>
-	    	{% for error in field.errors %}
-	      		<li class="form-error">{{ error }}</li>
-	    	{% endfor %}
-    	</ul>
+		{% for error in field.errors %}
+		<span class="helper-text red-text left">{{ error }}</span>
+		{% endfor %}
   	{% endif %}
 {% endmacro %}

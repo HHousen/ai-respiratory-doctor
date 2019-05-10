@@ -1,9 +1,9 @@
+{% set title = 'Forgot Password' %}
 {% extends "user/signup-layout.html" %}
-
 {% block content %}
 	<center>
 		<h4 class="white-text">Password Reset</h4>
-		<div class="container">
+		<div id="outer" class="container">
 			<div id="box" class="z-depth-1 grey lighten-4 row">
 				<form class="col s12" action="/user/forgot" method="POST">
 					<div class='row'>

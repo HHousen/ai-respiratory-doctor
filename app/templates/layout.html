@@ -1,4 +1,4 @@
-{% import "macros.html" as m %}
+{% import "components/macros.html" as m %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,86 +16,12 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	{% endblock %}
 </head>
-<body>		
-	<!-- Navbar -->
-	{% if current_user.is_authenticated %}
-		<ul id="dropdown-account" class="dropdown-content">
-			<li><a href="/user/account">My Account</a></li>
-			<li><a href="/user/signout">Sign Out</a></li>
-			{{ m.nav_link('pay', 'Pay') }}
-		</ul>
-	{% endif %}
-
-	<nav class="red darken-3" role="navigation">
-		<div class="nav-wrapper container">
-			<a id="logo-container" href="/" class="brand-logo">AI Respiratory Doctor</a>
-			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-			<ul class="right hide-on-med-and-down">
-				{{ m.nav_link('map', 'Map') }}
-				{% if current_user.is_authenticated %}
-					{{ m.nav_link('predict', 'Predict') }}
-					<li><a class="dropdown-trigger" href="#" data-target="dropdown-account">{{ current_user.first_name }}<i class="material-icons right">settings</i></a></li>
-				{% else %}
-					<li><a href="/user/signin">Sign In</a></li>
-					<li><a href="/user/signup">Sign Up</a></li>
-				{% endif %}
-			</ul>
-
-			<ul class="sidenav" id="nav-mobile">
-				{{ m.nav_link('map', 'Map') }}
-				{% if current_user.is_authenticated %}
-					{{ m.nav_link('predict', 'Predict') }}
-					<li><a href="/user/account">My Account</a></li>
-					<li><a href="/user/signout">Sign Out</a></li>
-					{{ m.nav_link('pay', 'Pay') }}
-				{% else %}
-					<li><a href="/user/signin">Sign In</a></li>
-					<li><a href="/user/signup">Sign Up</a></li>
-				{% endif %}
-			</ul>
-		</div>
-	</nav>
+<body>
+	{% block nav %} {% include "components/nav.html" %} {% endblock %}
 
 	{% block content %}{% endblock %}
 
-	{% block footer %}
-	<footer class="page-footer red darken-3">
-		<div class="container">
-			<div class="row">
-			<div class="col l6 s12">
-				<h5 class="white-text">AI Respiratory Doctor</h5>
-				<p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
-	
-	
-			</div>
-			<div class="col l3 s12">
-				<h5 class="white-text">Settings</h5>
-				<ul>
-				<li><a class="white-text" href="#!">Link 1</a></li>
-				<li><a class="white-text" href="#!">Link 2</a></li>
-				<li><a class="white-text" href="#!">Link 3</a></li>
-				<li><a class="white-text" href="#!">Link 4</a></li>
-				</ul>
-			</div>
-			<div class="col l3 s12">
-				<h5 class="white-text">Connect</h5>
-				<ul>
-				<li><a class="white-text" href="#!">Link 1</a></li>
-				<li><a class="white-text" href="#!">Link 2</a></li>
-				<li><a class="white-text" href="#!">Link 3</a></li>
-				<li><a class="white-text" href="#!">Link 4</a></li>
-				</ul>
-			</div>
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<div class="container">
-			&copy; <script>document.write(new Date().getFullYear());</script>, Designed and Coded by <a class="orange-text" href="https://haydenhousen.com">Hayden Housen</a>
-			</div>
-		</div>
-	</footer>
-	{% endblock %}
-
+	{% block footer %} {% include "components/footer.html" %} {% endblock %}
 	<!-- Scripts -->
 	<!-- jQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -107,13 +33,14 @@
 	<!-- Message flashing -->
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
+		<script>
+			$( document ).ready(function() {
 			{% for category, message in messages %}
-				<script>
-					$( document ).ready(function() {
-						M.toast({html: '{{ message }}'});
-					});
-				</script>
+				M.toast({html: '{{ message }}'});
+				
 			{% endfor %}
+			});
+		</script>
 	{% endif %}
 	{% endwith %}
 

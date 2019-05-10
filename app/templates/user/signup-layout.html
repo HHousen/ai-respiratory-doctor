@@ -4,17 +4,20 @@
 	<style>
 		body {
 			background: #222;
-			background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://unsplash.it/1200/800/?random');
-			background-repeat: no-repeat;
+			background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://picsum.photos/1200/800/?blur');
 			background-size: cover;
 			background-position: center center;
 			background-fill-mode: rgba(0,0,0,0.5);
 			height: 100vh;
+			transition: background 0.5s linear;
 		}
 		#box {
 			max-width: 423px;
 			padding: 32px 48px 0px 48px;
 			border: 5px solid #ef6c00;
+		}
+		#outer {
+			margin-bottom: 35px;
 		}
 	</style>
 {% endblock %}
