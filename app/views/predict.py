@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, Blueprint, current_app
 from app import app
 from werkzeug.utils import secure_filename
 from flask_login import login_user, logout_user, login_required, current_user
@@ -6,6 +6,8 @@ from app.decorators import payment_required
 # Import Fastai Libraries
 from fastai import *
 from fastai.vision import *
+
+predictbp = Blueprint('predictbp', __name__)
 
 NAME_OF_FILE = 'export.pkl' # Name of your exported file
 PATH_TO_MODELS_DIR = Path('models') # by default just use /models in root dir
@@ -22,7 +24,13 @@ def model_predict(img_path):
     final = dict(zip(classes, model_results_percent))
     return json.dumps(final)
 
-@app.route('/predict-api', methods=['GET', 'POST'])
+@predictbp.route('/predict')
+@login_required
+@payment_required
+def predict():
+    return render_template('predict.html', title='Predict')
+
+@predictbp.route('/predict-api', methods=['GET', 'POST'])
 @login_required
 @payment_required
 def upload():
@@ -30,8 +38,7 @@ def upload():
         # Get the file from post request
         f = request.files['file']
 
-        # Save the file to ./uploads
-        basepath = app.config['UPLOAD_FOLDER']
+        basepath = current_app.config['UPLOAD_FOLDER']
         file_path = os.path.join(basepath, secure_filename(f.filename))
         f.save(file_path)
 

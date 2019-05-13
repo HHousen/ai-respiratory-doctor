@@ -6,7 +6,8 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 
-from app import app, db
+from app import app
+from app.extensions import db
 from app.models import User
 
 

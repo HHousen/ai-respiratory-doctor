@@ -1,0 +1,24 @@
+import click
+from flask.cli import with_appcontext
+from werkzeug.exceptions import MethodNotAllowed, NotFound
+
+from app import app, models
+from app.extensions import db
+from termcolor import colored
+from distutils import util
+
+@click.command()
+def initdb():
+    ''' Create the SQL database. '''
+    db.create_all(app=app.create_app())
+    print(colored('The SQL database has been created', 'green'))
+
+@click.command()
+def dropdb():
+    ''' Delete the SQL database. '''
+    user_input = input('Are you sure you want to lose all your SQL data? ')
+    if util.strtobool(user_input) == 1:
+        db.drop_all(app=app.create_app())
+        print(colored('The SQL database has been deleted', 'green'))
+    else:
+        print(colored('Canceled', 'green'))

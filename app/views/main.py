@@ -1,25 +1,21 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, Blueprint
 from app import app
 import random
 from app.decorators import *
 
-@app.route('/')
-@app.route('/index')
+mainbp = Blueprint('mainbp', __name__)
+
+@mainbp.route('/')
+@mainbp.route('/index')
 def index():
     return render_template('index.html', title='Home')
 
-@app.route('/predict')
-@login_required
-@payment_required
-def predict():
-    return render_template('predict.html', title='Predict')
-
-@app.route('/map')
+@mainbp.route('/map')
 def map():
     return render_template('map.html', title='Map')
 
 
-@app.route('/map/refresh', methods=['POST'])
+@mainbp.route('/map/refresh', methods=['POST'])
 def map_refresh():
     points = [(random.uniform(48.8434100, 48.8634100),
                random.uniform(2.3388000, 2.3588000))
@@ -27,6 +23,6 @@ def map_refresh():
     return jsonify({'points': points})
 
 
-@app.route('/contact')
+@mainbp.route('/contact')
 def contact():
     return render_template('contact.html', title='Contact')

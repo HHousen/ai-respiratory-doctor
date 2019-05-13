@@ -1,8 +1,9 @@
 from flask import (Blueprint, render_template, redirect, url_for,
-                   abort, flash, request)
+                   abort, flash, request, current_app)
 from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import URLSafeTimedSerializer
-from app import app, models, db
+from app import models, app
+from app.extensions import db, login_manager
 from app.forms import user as user_forms
 from app.toolbox import email
 from app.decorators import already_signed_in
@@ -19,16 +20,18 @@ stripe_keys = {
 
 stripe.api_key = stripe_keys['secret_key']
 
-# Serializer for generating random tokens
-ts = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+@login_manager.user_loader
+def load_user(email):
+    return models.User.query.filter(models.User.email == email).first()
 
 # Create a user blueprint
 userbp = Blueprint('userbp', __name__, url_prefix='/user')
 
-
 @userbp.route('/signup', methods=['GET', 'POST'])
 @already_signed_in
 def signup():
+    # Serializer for generating random tokens
+    ts = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     form = user_forms.SignUp()
     if form.validate_on_submit():
         # Create a user who hasn't validated his email address
@@ -50,18 +53,19 @@ def signup():
         # Build a confirm link with token
         confirmUrl = url_for('userbp.confirm', token=token, _external=True)
         # Render an HTML template to send by email
-        html = render_template('email/confirm.html',
-                               confirm_url=confirmUrl)
+        html = render_template('email/confirm.html', confirm_url=confirmUrl)
         # Send the email to user
         email.send(user.email, subject, html)
         # Send back to the home page
         flash('Check your emails to confirm your email address.', 'positive')
-        return redirect(url_for('index'))
+        return redirect(url_for('mainbp.index'))
     return render_template('user/signup.html', form=form, title='Sign up')
 
 
 @userbp.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm(token):
+    # Serializer for generating random tokens
+    ts = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = ts.loads(token, salt='email-confirm-key', max_age=86400)
     # The token can either expire or be invalid
@@ -92,7 +96,7 @@ def signin():
                 login_user(user)
                 # Send back to the home page
                 flash('Succesfully signed in.', 'positive')
-                return redirect(url_for('index'))
+                return redirect(url_for('mainbp.index'))
             else:
                 flash('The password you have entered is wrong.', 'negative')
                 return redirect(url_for('userbp.signin'))
@@ -117,6 +121,8 @@ def account():
 
 @userbp.route('/forgot', methods=['GET', 'POST'])
 def forgot():
+    # Serializer for generating random tokens
+    ts = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     form = user_forms.Forgot()
     if form.validate_on_submit():
         user = models.User.query.filter_by(email=form.email.data).first()
@@ -143,6 +149,8 @@ def forgot():
 
 @userbp.route('/reset/<token>', methods=['GET', 'POST'])
 def reset(token):
+    # Serializer for generating random tokens
+    ts = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = ts.loads(token, salt='password-reset-key', max_age=86400)
     # The token can either expire or be invalid
@@ -164,7 +172,7 @@ def reset(token):
             return redirect(url_for('userbp.forgot'))
     return render_template('user/reset.html', form=form, token=token)
 
-@app.route('/user/pay')
+@userbp.route('/pay')
 @login_required
 def pay():
     user = models.User.query.filter_by(email=current_user.email).first()
@@ -172,7 +180,7 @@ def pay():
     	return render_template('user/buy.html', key=stripe_keys['publishable_key'], email=current_user.email)
     return "You already paid."
 
-@app.route('/user/charge', methods=['POST'])
+@userbp.route('/charge', methods=['POST'])
 @login_required
 def charge():
     try:
@@ -195,7 +203,7 @@ def charge():
         return render_template('error.html', message='Something went wrong with the payment.')
 
 
-@app.route('/api/payFail', methods=['POST', 'GET'])
+@userbp.route('/api/payFail', methods=['POST', 'GET'])
 def payFail():
 	content = request.json
 	stripe_email = content['data']['object']['email']
@@ -206,7 +214,7 @@ def payFail():
 		# do anything else, like execute shell command to disable user's service on your app
 	return "Response: User with associated email " + str(stripe_email) + " updated on our end (payment failure)."
 
-@app.route('/api/paySuccess', methods=['POST', 'GET'])
+@userbp.route('/api/paySuccess', methods=['POST', 'GET'])
 def paySuccess():
 	content = request.json
 	stripe_email = content['data']['object']['email']

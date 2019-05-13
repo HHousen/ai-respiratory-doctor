@@ -1,8 +1,8 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_login import UserMixin
 
-from app import db, bcrypt
-
+from app.extensions import db, bcrypt
+import datetime as dt
 
 class User(db.Model, UserMixin):
 
@@ -10,14 +10,15 @@ class User(db.Model, UserMixin):
 
     __tablename__ = 'users'
 
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    phone = db.Column(db.String)
-    email = db.Column(db.String, primary_key=True)
-    confirmation = db.Column(db.Boolean)
-    paid = db.Column(db.Boolean)
-    customer_id = db.Column(db.String)
-    _password = db.Column(db.Binary(60))
+    first_name = db.Column(db.String(30), nullable=True)
+    last_name = db.Column(db.String(30), nullable=True)
+    phone = db.Column(db.String(30), nullable=True)
+    email = db.Column(db.String(80), primary_key=True, unique=True, nullable=False)
+    confirmation = db.Column(db.Boolean(), nullable=False, default=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
+    paid = db.Column(db.Boolean(), nullable=False, default=False)
+    customer_id = db.Column(db.String(40), nullable=True)
+    _password = db.Column(db.Binary(60), nullable=False)
 
     @property
     def full_name(self):
