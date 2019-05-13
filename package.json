@@ -8,7 +8,7 @@
     "start": "concurrently -n \"BRUNCH,FLASK\" -c \"green.bold,cyan.bold\" \"npm:brunch-dev\" \"npm:flask-server\"",
     "brunch-dev": "NODE_ENV=debug brunch watch",
     "flask-server": "flask run",
-    "run-production": "npm build && gunicorn app:app"
+    "run-production": "npm run build && gunicorn \"app.app:create_app()\""
   },
   "repository": {
     "type": "git",
