@@ -9,6 +9,7 @@ def create_app(config_object='app.settings'):
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
+    register_errorhandlers(app)
     register_shellcontext(app)
     register_commands(app)
     return app
@@ -38,7 +39,7 @@ def register_errorhandlers(app):
         """Render error template."""
         # If a HTTPException, pull the `code` attribute; default to 500
         error_code = getattr(error, 'code', 500)
-        return render_template('error.html', message=error_code), error_code
+        return render_template('error.html', message=error_code, title=error_code), error_code
     for errcode in [401, 404, 410, 500]:
         app.errorhandler(errcode)(render_error)
     return None

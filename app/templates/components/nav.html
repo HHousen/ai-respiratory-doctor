@@ -6,7 +6,19 @@
         {{ m.nav_link('userbp.pay', 'Pay') }}
     </ul>
 {% endif %}
-
+<ul class="sidenav" id="nav-mobile">
+    {{ m.nav_link('mainbp.map', 'Map') }}
+    {% if current_user.is_authenticated %}
+        {{ m.nav_link('predictbp.predict', 'Predict') }}
+        <li><a href="/user/account">My Account</a></li>
+        <li><a href="/user/signout">Sign Out</a></li>
+        {{ m.nav_link('userbp.pay', 'Pay') }}
+    {% else %}
+        <li><a href="/user/signin">Sign In</a></li>
+        <li><a href="/user/signup">Sign Up</a></li>
+    {% endif %}
+</ul>
+<div class="navbar-fixed">
 <nav class="red darken-3" role="navigation">
 <div class="nav-wrapper container">
     <a id="logo-container" href="/" class="brand-logo">AI Respiratory Doctor</a>
@@ -21,18 +33,6 @@
             <li><a href="/user/signup">Sign Up</a></li>
         {% endif %}
     </ul>
-
-    <ul class="sidenav" id="nav-mobile">
-        {{ m.nav_link('mainbp.map', 'Map') }}
-        {% if current_user.is_authenticated %}
-            {{ m.nav_link('predictbp.predict', 'Predict') }}
-            <li><a href="/user/account">My Account</a></li>
-            <li><a href="/user/signout">Sign Out</a></li>
-            {{ m.nav_link('userbp.pay', 'Pay') }}
-        {% else %}
-            <li><a href="/user/signin">Sign In</a></li>
-            <li><a href="/user/signup">Sign Up</a></li>
-        {% endif %}
-    </ul>
 </div>
 </nav>
+</div>

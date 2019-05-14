@@ -57,7 +57,7 @@ def signup():
         # Send the email to user
         email.send(user.email, subject, html)
         # Send back to the home page
-        flash('Check your email to confirm your email address.', 'positive')
+        flash('Check your email to confirm your email address', 'positive')
         return redirect(url_for('mainbp.index'))
     return render_template('user/signup.html', form=form, title='Sign up')
 
@@ -78,8 +78,7 @@ def confirm(token):
     # Update the database with the user
     db.session.commit()
     # Send to the signin page
-    flash(
-        'Your email address has been confirmed, you can sign in.', 'positive')
+    flash('Your email address has been confirmed, you can sign in', 'positive')
     return redirect(url_for('userbp.signin'))
 
 
@@ -95,13 +94,13 @@ def signin():
             if user.check_password(form.password.data):
                 login_user(user)
                 # Send back to the home page
-                flash('Succesfully signed in.', 'positive')
+                flash('Succesfully signed in', 'positive')
                 return redirect(url_for('mainbp.index'))
             else:
-                flash('The password you have entered is wrong.', 'negative')
+                flash('The password you have entered is wrong', 'negative')
                 return redirect(url_for('userbp.signin'))
         else:
-            flash('Unknown email address.', 'negative')
+            flash('Unknown email address', 'negative')
             return redirect(url_for('userbp.signin'))
     return render_template('user/signin.html', form=form, title='Sign in')
 
@@ -109,8 +108,8 @@ def signin():
 @userbp.route('/signout')
 def signout():
     logout_user()
-    flash('Succesfully signed out.', 'positive')
-    return redirect(url_for('index'))
+    flash('Succesfully signed out', 'positive')
+    return redirect(url_for('mainbp.index'))
 
 
 @userbp.route('/account')
@@ -139,10 +138,10 @@ def forgot():
             # Send the email to user
             email.send(user.email, subject, html)
             # Send back to the home page
-            flash('Check your emails to reset your password.', 'positive')
+            flash('Check your emails to reset your password', 'positive')
             return redirect(url_for('index'))
         else:
-            flash('Unknown email address.', 'negative')
+            flash('Unknown email address', 'negative')
             return redirect(url_for('userbp.forgot'))
     return render_template('user/forgot.html', form=form)
 
@@ -165,10 +164,10 @@ def reset(token):
             # Update the database with the user
             db.session.commit()
             # Send to the signin page
-            flash('Your password has been reset, you can sign in.', 'positive')
+            flash('Your password has been reset, you can sign in', 'positive')
             return redirect(url_for('userbp.signin'))
         else:
-            flash('Unknown email address.', 'negative')
+            flash('Unknown email address', 'negative')
             return redirect(url_for('userbp.forgot'))
     return render_template('user/reset.html', form=form, token=token)
 
