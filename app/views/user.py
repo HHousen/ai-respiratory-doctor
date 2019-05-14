@@ -57,7 +57,7 @@ def signup():
         # Send the email to user
         email.send(user.email, subject, html)
         # Send back to the home page
-        flash('Check your emails to confirm your email address.', 'positive')
+        flash('Check your email to confirm your email address.', 'positive')
         return redirect(url_for('mainbp.index'))
     return render_template('user/signup.html', form=form, title='Sign up')
 

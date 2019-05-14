@@ -22,3 +22,14 @@ def dropdb():
         print(colored('The SQL database has been deleted', 'green'))
     else:
         print(colored('Canceled', 'green'))
+
+@click.command()
+def recycledb():
+    ''' Recycle the SQL database. '''
+    user_input = input('Are you sure you want recreate the SQL database? All data will be lost. ')
+    if util.strtobool(user_input) == 1:
+        db.drop_all(app=app.create_app())
+        db.create_all(app=app.create_app())
+        print(colored('The SQL database has been recreated', 'green'))
+    else:
+        print(colored('Canceled', 'green'))

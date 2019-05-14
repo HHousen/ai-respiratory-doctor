@@ -213,3 +213,5 @@ typings/
 ## CUSTOM
 # Ignore app/static
 /app/static/*
+# Ignore development app.db
+/app/app.db

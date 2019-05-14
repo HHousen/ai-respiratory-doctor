@@ -25,6 +25,7 @@ fastai = "==1.0.46"
 click = "==7.0"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.7"
