@@ -175,7 +175,7 @@ def reset(token):
 @login_required
 def pay():
     user = models.User.query.filter_by(email=current_user.email).first()
-    if user.paid != 1:
+    if user.credits < 1:
     	return render_template('user/buy.html', key=stripe_keys['publishable_key'], email=current_user.email)
     return "You already paid."
 
@@ -193,7 +193,7 @@ def charge():
             description='Service Plan'
         )
         user = models.User.query.filter_by(email=current_user.email).first()
-        user.paid = 1
+        user.credits = 5
         user.customer_id = customer.id
         db.session.commit()
         # do anything else, like execute shell command to enable user's service on your app
@@ -208,7 +208,7 @@ def payFail():
 	stripe_email = content['data']['object']['email']
 	user = models.User.query.filter_by(email=stripe_email).first()
 	if user is not None: 
-		user.paid = 0
+		user.credits -= 5
 		db.session.commit()
 		# do anything else, like execute shell command to disable user's service on your app
 	return "Response: User with associated email " + str(stripe_email) + " updated on our end (payment failure)."
@@ -218,8 +218,8 @@ def paySuccess():
 	content = request.json
 	stripe_email = content['data']['object']['email']
 	user = models.User.query.filter_by(email=stripe_email).first()
-	if user is not None: 
-		user.paid = 1
-		db.session.commit()
+	#if user is not None: 
+		#user.paid = 1
+		#db.session.commit()
 		# do anything else on payment success, maybe send a thank you email or update more db fields?
 	return "Response: User with associated email " + str(stripe_email) + " updated on our end (paid)."

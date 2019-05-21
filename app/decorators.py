@@ -6,8 +6,8 @@ from urllib.parse import urlparse, urljoin
 def payment_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.paid != 1:
-            flash('You must pay to access this page', 'negative')
+        if current_user.credits < 1:
+            flash('You must add more credits to access this page', 'negative')
             return redirect(url_for('userbp.pay', next=request.url))
         return f(*args, **kwargs)
     return decorated_function

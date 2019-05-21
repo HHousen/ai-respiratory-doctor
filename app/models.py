@@ -15,8 +15,8 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(30), nullable=True)
     email = db.Column(db.String(80), primary_key=True, unique=True, nullable=False)
     confirmation = db.Column(db.Boolean(), nullable=False, default=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
-    paid = db.Column(db.Boolean(), nullable=False, default=False)
+    created_at = db.Column(db.DateTime(), nullable=True, default=dt.datetime.utcnow)
+    credits = db.Column(db.Integer(), nullable=True, default=0)
     customer_id = db.Column(db.String(40), nullable=True)
     _password = db.Column(db.Binary(60), nullable=False)
 
@@ -38,5 +38,5 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.email
 
-    def is_paid(self):
-        return self.paid
+    def get_credits(self):
+        return self.credits

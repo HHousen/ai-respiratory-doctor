@@ -21,35 +21,49 @@
             <input name="file" type="file" multiple />
         </div>
     </form>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Percent</th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
-        </tbody>
-    </table>
+
+    <ul class="collapsible popout">
+        <li>
+          <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+        <li>
+          <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+      </ul>
 </div>
 {% endblock %}
 
 {% block final %}
 <script>
+    $(document).ready(function(){
+        $('.collapsible').collapsible();
+    });
+      
     Dropzone.options.uploadFile = {
         paramName: "file", // The name that will be used to transfer the file
-        acceptedFiles: "image/*",
+        uploadMultiple: true,
+        parallelUploads: 5,
+
         maxFilesize: 2, // MB
         init: function() {
-            this.on("success", function(file, data) {
+            this.on("successmultiple", function(file, data) {
                 console.log('Success!' + data);
                 $('#tbody').empty();
-                jQuery.each(JSON.parse(data), function (key, value) {
-                    var eachrow = "<tr>"
+                jQuery.each(JSON.parse(data), function (name, predictions) {
+                    var eachrow = "";
+                    jQuery.each(predictions, function (key, value) { 
+                        eachrow += "<tr>"
                                 + "<td>" + key + "</td>"
                                 + "<td>" + value + "</td>"
                                 + "</tr>";
-                    $('#tbody').append(eachrow);
+                    });
+                    var collapsible="<li>"
+                                    + "<div class='collapsible-header'><i class='material-icons'>filter_drama</i>" + name + "</div>"
+                                    + "<div class='collapsible-body'><span>" + "<table><thead><tr><th>Category</th><th>Percent</th></tr></thead><tbody>" + eachrow + "</tbody></table>" + "</span></div>"
+                                    + "</li>"
+                    $('.collapsible').append(collapsible);
                 });
             });
         }
