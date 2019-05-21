@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-from app import commands
-from app.views import user, predict, main, admin
+from app import commands, admin
+from app.views import user, predict, main
 from app.models import User
 from app.extensions import bcrypt, db, toolbar, login_manager, mail, admin_panel
 import os.path as op
@@ -33,7 +33,6 @@ def register_blueprints(app):
     app.register_blueprint(user.userbp)
     app.register_blueprint(main.mainbp)
     app.register_blueprint(predict.predictbp)
-    app.register_blueprint(admin.adminbp)
     return None
 
 def register_admins(app):

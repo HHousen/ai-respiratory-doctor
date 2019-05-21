@@ -9,7 +9,7 @@ from flask_admin.contrib.fileadmin import FileAdmin
 from app.extensions import db
 from app.models import User
 
-adminbp = Blueprint('adminbp', __name__)
+#adminbp = Blueprint('adminbp', __name__)
 
 class ModelView(ModelView):
 
