@@ -5,11 +5,17 @@ from werkzeug.exceptions import HTTPException
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
-
-from app.extensions import db
 from app.models import User
+from app.extensions import db
 
-#adminbp = Blueprint('adminbp', __name__)
+def init_admin(admin_panel):
+    # Users
+    admin_panel.add_view(ModelView(User, db.session))
+
+    # Static files
+    path = op.join(op.dirname(__file__), 'static')
+    admin_panel.add_view(FileAdmin(path, '/static/', name='Static'))
+    return None
 
 class ModelView(ModelView):
 

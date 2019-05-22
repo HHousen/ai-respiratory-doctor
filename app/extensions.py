@@ -19,5 +19,3 @@ from flask_login import LoginManager
 login_manager = LoginManager()
 
 # Admin panel
-from flask_admin import Admin
-admin_panel = Admin(name='Admin', template_mode='bootstrap3')
