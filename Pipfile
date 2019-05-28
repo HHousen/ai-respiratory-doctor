@@ -23,6 +23,7 @@ stripe = "==2.21.0"
 psycopg2-binary = "==2.8.2"
 fastai = "==1.0.46"
 click = "==7.0"
+flask-moment = "*"
 
 [dev-packages]
 pylint = "*"
@@ -32,3 +33,6 @@ python_version = "3.7"
 
 [packages.24386c3]
 file = "https://download.pytorch.org/whl/cpu/torch-1.1.0-cp37-cp37m-linux_x86_64.whl"
+
+[packages.3ae9ae8]
+file = "https://download.pytorch.org/whl/cpu/torchvision-0.3.0-cp37-cp37m-linux_x86_64.whl"

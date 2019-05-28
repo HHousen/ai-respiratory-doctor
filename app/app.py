@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from app import commands, admin
 from app.views import user, predict, main
 from app.models import User
-from app.extensions import bcrypt, db, toolbar, login_manager, mail
+from app.extensions import bcrypt, db, toolbar, login_manager, mail, moment
 from app.logger_setup import logger_setup
 import os.path as op
 
@@ -27,6 +27,7 @@ def register_extensions(app):
     login_manager.login_view = 'userbp.signin'
     toolbar.init_app(app)
     mail.init_app(app)
+    moment.init_app(app)
     return None
 
 def register_blueprints(app):

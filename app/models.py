@@ -3,6 +3,7 @@ from flask_login import UserMixin
 
 from app.extensions import db, bcrypt
 import datetime as dt
+from hashlib import md5
 
 class User(db.Model, UserMixin):
 
@@ -16,6 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), primary_key=True, unique=True, nullable=False)
     confirmation = db.Column(db.Boolean(), nullable=False, default=False)
     created_at = db.Column(db.DateTime(), nullable=True, default=dt.datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=dt.datetime.utcnow)
     credits = db.Column(db.Integer(), nullable=True, default=0)
     customer_id = db.Column(db.String(40), nullable=True)
     _password = db.Column(db.Binary(60), nullable=False)
@@ -40,3 +42,7 @@ class User(db.Model, UserMixin):
 
     def get_credits(self):
         return self.credits
+    
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)

@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, PasswordField
-from wtforms.validators import (Required, Length, Email, ValidationError,
-                                EqualTo)
+from wtforms import TextField, PasswordField, IntegerField
+from wtforms.validators import Required, Length, Email, ValidationError, EqualTo, NumberRange, Optional
 from app.models import User
 
 
@@ -76,3 +75,12 @@ class SignUp(FlaskForm):
         EqualTo('confirm', message='Passwords must match.')
     ], description='Password')
     confirm = PasswordField(description='Confirm password')
+
+class Credits(FlaskForm):
+    credits = IntegerField(validators=[Required(), NumberRange(min=1)],
+                     description='Number of Credits')
+
+class Plan(FlaskForm):
+    credits = IntegerField(validators=[Optional(), NumberRange(min=1)],
+                     description='Number of Credits')
+    plan = TextField(validators=[Required()])

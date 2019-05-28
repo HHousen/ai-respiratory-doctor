@@ -16,22 +16,17 @@
 </div>
 
 <div class="container">
-    <form class="dropzone" action="/predict-api" id="uploadFile" method="post" type="file" name="file" enctype="multipart/form-data">
-        <div class="fallback">
-            <input name="file" type="file" multiple />
-        </div>
-    </form>
-
-    <ul class="collapsible popout">
-        <li>
-          <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-        </li>
-        <li>
-          <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-        </li>
-      </ul>
+    <div class="section">
+        <form class="dropzone" action="/predict-api" id="uploadFile" method="post" type="file" name="file" enctype="multipart/form-data">
+            <div class="fallback">
+                <input name="file" type="file" multiple />
+            </div>
+        </form>
+    </div>
+    <div id="results" class="section" style="display:none;">
+        <h3 class="center-align">Results</h3>
+        <ul class="collapsible popout"></ul>
+    </div>
 </div>
 {% endblock %}
 
@@ -50,7 +45,7 @@
         init: function() {
             this.on("successmultiple", function(file, data) {
                 console.log('Success!' + data);
-                $('#tbody').empty();
+                $('#results').css('display', 'block');
                 jQuery.each(JSON.parse(data), function (name, predictions) {
                     var eachrow = "";
                     jQuery.each(predictions, function (key, value) { 
@@ -60,10 +55,10 @@
                                 + "</tr>";
                     });
                     var collapsible="<li>"
-                                    + "<div class='collapsible-header'><i class='material-icons'>filter_drama</i>" + name + "</div>"
-                                    + "<div class='collapsible-body'><span>" + "<table><thead><tr><th>Category</th><th>Percent</th></tr></thead><tbody>" + eachrow + "</tbody></table>" + "</span></div>"
+                                    + "<div class='collapsible-header'><i class='material-icons'>image</i>" + name + "</div>"
+                                    + "<div class='collapsible-body'><span>" + "<table class='striped highlight'><thead><tr><th>Category</th><th>Percent</th></tr></thead><tbody>" + eachrow + "</tbody></table>" + "</span></div>"
                                     + "</li>"
-                    $('.collapsible').append(collapsible);
+                    $(collapsible).appendTo('.collapsible').hide().fadeIn();
                 });
             });
         }

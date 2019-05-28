@@ -18,4 +18,6 @@ bcrypt = Bcrypt()
 from flask_login import LoginManager
 login_manager = LoginManager()
 
-# Admin panel
+# Moment.js - Times & Dates
+from flask_moment import Moment
+moment = Moment() 

@@ -174,32 +174,64 @@ def reset(token):
 @userbp.route('/pay')
 @login_required
 def pay():
-    user = models.User.query.filter_by(email=current_user.email).first()
-    if user.credits < 1:
-    	return render_template('user/buy.html', key=stripe_keys['publishable_key'], email=current_user.email)
-    return "You already paid."
+    form = user_forms.Plan()
+    return render_template('user/buy.html', form=form, key=stripe_keys['publishable_key'], email=current_user.email)
 
 @userbp.route('/charge', methods=['POST'])
 @login_required
 def charge():
-    try:
-        # Amount in cents
-        amount = 500
-        customer = stripe.Customer.create(email=current_user.email, source=request.form['stripeToken'])
-        charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description='Service Plan'
-        )
-        user = models.User.query.filter_by(email=current_user.email).first()
-        user.credits = 5
-        user.customer_id = customer.id
-        db.session.commit()
-        # do anything else, like execute shell command to enable user's service on your app
-        return render_template('user/charge.html', amount=amount)
-    except stripe.error.StripeError:
-        return render_template('error.html', message='Something went wrong with the payment.')
+    form = user_forms.Plan()
+    if form.validate_on_submit():
+        plan = form.plan.data
+        if current_user.customer_id is not None:
+            try:
+                customer = stripe.Customer.create(email=current_user.email, source=request.form['stripeToken'])
+                current_user.customer_id = customer.id
+            except stripe.error.StripeError:
+                return render_template('error.html', message='Something went wrong with the payment.')
+        
+        if plan == "credits":
+            try:
+                amount = form.credits.data * 100
+                charge = stripe.Charge.create(
+                    customer=current_user.customer_id,
+                    amount=amount,
+                    currency='usd',
+                    description='Service Plan'
+                )
+                current_user.credits += form.credits.data
+                db.session.commit()
+                flash('Success! You bought {} credits.'.format(form.credits.data), 'positive')
+                return redirect(url_for('userbp.account'))
+            except stripe.error.StripeError:
+                return render_template('error.html', message='Something went wrong with the payment.')
+        elif plan == "individual":
+            amount = 100 * 100
+            charge = stripe.Charge.create(
+                customer=current_user.customer_id,
+                amount=amount,
+                currency='usd',
+                description='Service Plan'
+            )
+            current_user.credits += 100
+            db.session.commit()
+            flash('Success! You bought the individual plan.', 'positive')
+            return redirect(url_for('userbp.account'))
+        elif plan == "enterprise":
+            amount = 1000 * 100
+            charge = stripe.Charge.create(
+                customer=current_user.customer_id,
+                amount=amount,
+                currency='usd',
+                description='Service Plan'
+            )
+            current_user.credits += 1000
+            db.session.commit()
+            flash('Success! You bought the enterprise plan.', 'positive')
+            return redirect(url_for('userbp.account'))
+        else:
+            return render_template('error.html', message='Something went wrong with the payment.')
+    return render_template('error.html', message='Something went wrong with the payment.')
 
 
 @userbp.route('/api/payFail', methods=['POST', 'GET'])
