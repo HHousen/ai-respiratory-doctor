@@ -183,7 +183,7 @@ def charge():
     form = user_forms.Plan()
     if form.validate_on_submit():
         plan = form.plan.data
-        if current_user.customer_id is not None:
+        if current_user.customer_id is None:
             try:
                 customer = stripe.Customer.create(email=current_user.email, source=request.form['stripeToken'])
                 current_user.customer_id = customer.id
