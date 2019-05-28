@@ -35,6 +35,8 @@ LOG_BACKUPS = env.int('LOG_BACKUPS', default=0)
 
 UPLOAD_FOLDER = env.str('UPLOAD_FOLDER', default='uploads')
 
+AUTO_CONFIRM = env.bool('AUTO_CONFIRM', default='False')
+
 if env.bool("USE_MAIL"):
     MAIL_SERVER = env.str('MAIL_SERVER')
     MAIL_PORT = env.int('MAIL_PORT', default=465)

@@ -34,13 +34,12 @@ def signup():
     ts = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     form = user_forms.SignUp()
     if form.validate_on_submit():
-        # Create a user who hasn't validated his email address
         user = models.User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             phone=form.phone.data,
             email=form.email.data,
-            confirmation=True,
+            confirmation=current_app.config['AUTO_CONFIRM'],
             password=form.password.data
         )
         # Insert the user in the database
@@ -171,11 +170,71 @@ def reset(token):
             return redirect(url_for('userbp.forgot'))
     return render_template('user/reset.html', form=form, token=token)
 
-@userbp.route('/pay')
+@userbp.route('/pay', methods=['GET', 'POST'])
 @login_required
 def pay():
-    form = user_forms.Plan()
-    return render_template('user/buy.html', form=form, key=stripe_keys['publishable_key'], email=current_user.email)
+    plan_form = user_forms.Plan()
+    credits_form = user_forms.Credits()
+    if credits_form.validate_on_submit():
+        if current_user.customer_id is None:
+            try:
+                customer = stripe.Customer.create(email=current_user.email, source=request.form['stripeToken'])
+                current_user.customer_id = customer.id
+            except stripe.error.StripeError:
+                return render_template('error.html', message='Something went wrong with the payment.')
+        try:
+            amount = credits_form.credits.data * 100
+            charge = stripe.Charge.create(
+                customer=current_user.customer_id,
+                amount=amount,
+                currency='usd',
+                description='Service Plan'
+            )
+            current_user.credits += credits_form.credits.data
+            db.session.commit()
+            flash('Success! You bought {} credits.'.format(credits_form.credits.data), 'positive')
+            return redirect(url_for('userbp.account'))
+        except stripe.error.StripeError:
+            return render_template('error.html', message='Something went wrong with the payment.')
+
+    if plan_form.validate_on_submit():
+        plan = plan_form.plan.data
+        if current_user.customer_id is None:
+            try:
+                customer = stripe.Customer.create(email=current_user.email, source=request.form['stripeToken'])
+                current_user.customer_id = customer.id
+            except stripe.error.StripeError:
+                return render_template('error.html', message='Something went wrong with the payment.')
+        try:
+            if plan == "individual":
+                amount = 100 * 100
+                charge = stripe.Charge.create(
+                    customer=current_user.customer_id,
+                    amount=amount,
+                    currency='usd',
+                    description='Service Plan'
+                )
+                current_user.credits += 100
+                db.session.commit()
+                flash('Success! You bought the individual plan.', 'positive')
+                return redirect(url_for('userbp.account'))
+            elif plan == "enterprise":
+                amount = 1000 * 100
+                charge = stripe.Charge.create(
+                    customer=current_user.customer_id,
+                    amount=amount,
+                    currency='usd',
+                    description='Service Plan'
+                )
+                current_user.credits += 1000
+                db.session.commit()
+                flash('Success! You bought the enterprise plan.', 'positive')
+                return redirect(url_for('userbp.account'))
+            else:
+                return render_template('error.html', message='Something went wrong with the payment.')
+        except stripe.error.StripeError:
+            return render_template('error.html', message='Something went wrong with the payment.')
+    return render_template('user/buy.html', plan_form=plan_form, credits_form=credits_form, key=stripe_keys['publishable_key'], email=current_user.email)
 
 @userbp.route('/charge', methods=['POST'])
 @login_required

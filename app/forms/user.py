@@ -81,6 +81,4 @@ class Credits(FlaskForm):
                      description='Number of Credits')
 
 class Plan(FlaskForm):
-    credits = IntegerField(validators=[Optional(), NumberRange(min=1)],
-                     description='Number of Credits')
     plan = TextField(validators=[Required()])

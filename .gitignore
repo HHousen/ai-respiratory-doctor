@@ -215,3 +215,5 @@ typings/
 /app/static/*
 # Ignore development app.db
 /app/app.db
+# Ignore vscode settings
+.vscode
