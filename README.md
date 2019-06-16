@@ -127,7 +127,7 @@ Or use a different service. Run command is ``npm run run-production``
 
 Hayden Housen – [haydenhousen.com](https://haydenhousen.com)
 
-Distributed under the MIT license. See the [LICENSE.md](LICENSE.md) for more information.
+Distributed under the MIT license. See the [LICENSE](LICENSE) for more information.
 
 <https://github.com/HHousen>
 
