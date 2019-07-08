@@ -1,3 +1,4 @@
+![AI Respiratory Doctor Logo](app/static/img/logo_256.png)
 # AI Respiratory Doctor
 > A flask web app template for use with machine learning projects. Follows best practices such as application factories and Pipfiles.
 
