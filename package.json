@@ -10,6 +10,10 @@
     "flask-server": "flask run",
     "run-production": "npm run build && gunicorn --preload \"app.app:create_app()\""
   },
+  "engines": { 
+    "npm": "^6.9.0",
+    "node": "^10.16.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HHousen/ai-respiratory-doctor.git"
