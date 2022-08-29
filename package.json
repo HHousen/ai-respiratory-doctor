@@ -8,7 +8,7 @@
     "start": "concurrently -n \"BRUNCH,FLASK\" -c \"green.bold,cyan.bold\" \"npm:brunch-dev\" \"npm:flask-server\"",
     "brunch-dev": "NODE_ENV=debug brunch watch",
     "flask-server": "flask run",
-    "run-production": "npm run build && gunicorn --preload \"app.app:create_app()\""
+    "run-production": "npm run build && gunicorn --workers 1 --preload \"app.app:create_app()\""
   },
   "engines": { 
     "npm": "^6.9.0",
